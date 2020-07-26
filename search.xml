@@ -18,4 +18,18 @@
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 ]]></content>
   </entry>
+  <entry>
+    <title>Do you know JVM?</title>
+    <url>/2020/07/26/Do-you-know-JVM/</url>
+    <content><![CDATA[<h3 id="JVM概述"><a href="#JVM概述" class="headerlink" title="JVM概述"></a>JVM概述</h3><ul>
+<li>什么是JVM呢？ </li>
+</ul>
+]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>jvm</tag>
+      </tags>
+  </entry>
 </search>
