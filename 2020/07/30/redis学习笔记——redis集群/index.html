@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="redis," />
 
 
 
@@ -83,14 +83,31 @@
 
 
 
-<meta name="description" content="你应该保持坚持和自律，这会让你在各个方面都有所成就">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Wanyw-Blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="1 主从复制简介互联网三高结构：高性能 高并发 高可用 引言 单机redis的风险与问题 机器故障  硬盘故障，系统奔溃，redis服务器宕机 数据丢失，灾难性打击   容量瓶颈  单机redis内存不够用，只能升级内存   成本太高   结论：  考虑使用多台服务器，多台服务器连接在一起并将数据同步，实现数据在各台服务器上的备份，当一台服务器出现故障时，其他的服务器能够继续提供服务，通过这种方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis学习笔记——redis集群">
+<meta property="og:url" content="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/index.html">
 <meta property="og:site_name" content="Wanyw-Blog">
-<meta property="og:description" content="你应该保持坚持和自律，这会让你在各个方面都有所成就">
+<meta property="og:description" content="1 主从复制简介互联网三高结构：高性能 高并发 高可用 引言 单机redis的风险与问题 机器故障  硬盘故障，系统奔溃，redis服务器宕机 数据丢失，灾难性打击   容量瓶颈  单机redis内存不够用，只能升级内存   成本太高   结论：  考虑使用多台服务器，多台服务器连接在一起并将数据同步，实现数据在各台服务器上的备份，当一台服务器出现故障时，其他的服务器能够继续提供服务，通过这种方法">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E8%BF%87%E7%A8%8B%E6%A6%82%E8%BF%B0.PNG">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%91%BD%E4%BB%A4%E4%BC%A0%E6%92%AD%E8%BF%87%E7%A8%8B.PNG">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E5%BF%83%E8%B7%B3.PNG">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E7%BD%91%E7%BB%9C%E4%B8%AD%E6%96%AD1.PNG">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E7%BD%91%E7%BB%9C%E4%B8%AD%E6%96%AD2.PNG">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E5%93%A8%E5%85%B51.PNG">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E5%93%A8%E5%85%B52.PNG">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E5%93%A8%E5%85%B53.PNG">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E5%93%A8%E5%85%B55.PNG">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E9%9B%86%E7%BE%A4%E6%95%B0%E6%8D%AE%E8%AE%BE%E8%AE%A11.PNG">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E9%9B%86%E7%BE%A4%E9%80%9A%E8%AE%AF%E8%AE%BE%E8%AE%A1.PNG">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E9%9B%86%E7%BE%A4%E5%AE%9E%E7%8E%B02.PNG">
+<meta property="og:image" content="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E9%9B%86%E7%BE%A4%E5%AE%9E%E7%8E%B01.PNG">
+<meta property="article:published_time" content="2020-07-30T08:52:50.000Z">
+<meta property="article:modified_time" content="2020-07-30T09:51:37.187Z">
 <meta property="article:author" content="wanyw">
+<meta property="article:tag" content="redis">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E8%BF%87%E7%A8%8B%E6%A6%82%E8%BF%B0.PNG">
 
 
 
@@ -120,13 +137,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/07/30/redis学习笔记——redis集群/"/>
 
 
 
 
 
-  <title>Wanyw-Blog</title>
+  <title>redis学习笔记——redis集群 | Wanyw-Blog</title>
   
 
 
@@ -145,8 +162,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -283,402 +299,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/09/Java8%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94HashMap/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wanyw">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wanyw-Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/08/09/Java8%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94HashMap/" itemprop="url">Java8源码解读系列——HashMap</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-09T10:36:09+08:00">
-                2020-08-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2020/08/09/Java8%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94HashMap/" class="leancloud_visitors" data-flag-title="Java8源码解读系列——HashMap">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  4,829字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  24分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          1 引言HashMap是面试中最常问的内容之一，除此之外和它配套的还有ConcurrentHashMap(JDK1.5开始提供的一个适用于高并发的键值对数据结构)。在我们的日常学习（刷题）中，也免不了接触哈希表这种数据结构，所以使用上是没有问题的，但是面试官一般都喜欢怼源码，所以想要征服（吊打）面试
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/08/09/Java8%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94HashMap/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E4%BC%81%E4%B8%9A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wanyw">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wanyw-Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E4%BC%81%E4%B8%9A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" itemprop="url">redis学习笔记——redis企业解决方案</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-30T17:01:36+08:00">
-                2020-07-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index">
-                    <span itemprop="name">中间件</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E4%BC%81%E4%B8%9A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="leancloud_visitors" data-flag-title="redis学习笔记——redis企业解决方案">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  20字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          1 缓存预热
-
-
-2 缓存雪崩
-
-
-
-3 缓存穿透
-
-
-4 缓存击穿
-
-
-
-          
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E4%BC%81%E4%B8%9A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
 
   
 
@@ -708,9 +331,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/" itemprop="url">redis学习笔记——redis集群</a></h1>
+          <h1 class="post-title" itemprop="name headline">redis学习笔记——redis集群</h1>
         
 
         <div class="post-meta">
@@ -824,34 +445,197 @@
       
 
       
-        
-          
-          1 主从复制简介互联网三高结构：高性能 高并发 高可用
-引言 单机redis的风险与问题
-机器故障
+        <h3 id="1-主从复制简介"><a href="#1-主从复制简介" class="headerlink" title="1 主从复制简介"></a>1 主从复制简介</h3><p>互联网三高结构：高性能 高并发 高可用</p>
+<h4 id="引言-单机redis的风险与问题"><a href="#引言-单机redis的风险与问题" class="headerlink" title="引言 单机redis的风险与问题"></a>引言 单机redis的风险与问题</h4><ul>
+<li><p>机器故障</p>
+<ul>
+<li>硬盘故障，系统奔溃，redis服务器宕机</li>
+<li>数据丢失，灾难性打击</li>
+</ul>
+</li>
+<li><p>容量瓶颈</p>
+<ul>
+<li>单机redis内存不够用，只能升级内存</li>
+</ul>
+</li>
+<li><p>成本太高</p>
+</li>
+</ul>
+<p>结论：<br>  考虑使用多台服务器，多台服务器连接在一起并将数据同步，实现数据在各台服务器上的备份，当一台服务器出现故障时，其他的服务器能够继续提供服务，通过这种方法实现高可用</p>
+<h4 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h4><p>为减少服务器之间信息的传递，redis在多个服务器中的选择一个服务器作为主计算机(master)，将其他服务器作为从计算机(slave) 主服务器负责读和写（通常把读操作关闭），而从计算机只负责读（通常把写操作关闭），当master和slave需要进行数据同步时，由master向其他slave进行数据同步。具体：当master中的数据发生变化时，master需要向其他slave进行数据同步，而主从复制则是master向slave进行有效的数据同步的过程</p>
+<p><strong>主从复制的作用</strong></p>
+<p>读写分离：master主要负责写数据 而slave主要负责读数据</p>
+<p>负载均衡：基于主从结构，配合读写分离，master节点配合多个salve节点，根据需求调整salve节点的数量，让slave分担master节点的数据读取负载，从而提高redis的并发量和吞吐服务</p>
+<p>故障恢复：当master节点或其他节点发生故障时，其余的任何节点都能顶替master继续提供服务</p>
+<p>数据冗余：实现数据热备份，是持久化之外的一种数据冗余方式</p>
+<p><strong>主从复制的过程</strong></p>
+<ol>
+<li>建立连接阶段</li>
+<li>数据同步阶段</li>
+<li>命令传播阶段</li>
+</ol>
+<p><img src="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E8%BF%87%E7%A8%8B%E6%A6%82%E8%BF%B0.PNG" alt="主从复制过程概述"></p>
+<h4 id="建立连接阶段"><a href="#建立连接阶段" class="headerlink" title="建立连接阶段"></a>建立连接阶段</h4><p>redis采用的是从服务器主动连接主服务器的方式，所以有以下几个阶段</p>
+<ul>
+<li>salve节点执行slaveof ip port命令表明该服务器是ip:port的slave节点</li>
+<li>master节点收到指令，发送反馈信息</li>
+<li>slave节点保存master节点的host和port</li>
+<li>根据返回信息创建连接master的socket</li>
+<li>同时执行周期性的ping操作以此确认master的存活状态</li>
+<li>响应pong</li>
+<li>salve返回器redis锁监听的端口</li>
+<li>master节点保存端口号</li>
+</ul>
+<p>启动连接的方式：</p>
+<pre><code>客户端发送slaveof ip port指令
 
-硬盘故障，系统奔溃，redis服务器宕机
-数据丢失，灾难性打击
+服务器指定启动参数：--slaveof ip port
 
+配置文件指定slaveof ip port</code></pre><h4 id="数据同步阶段"><a href="#数据同步阶段" class="headerlink" title="数据同步阶段"></a>数据同步阶段</h4><p>slave和master连接后也是由slave主动请求数据</p>
+<ul>
+<li>slave发起psync2同步数据请求</li>
+<li>master收到该请求后将执行bgsave指令，将master中的所有数据转存为一个rdb文件</li>
+<li>通过socker将rdb文件发送给slave</li>
+<li>此后master接受到的写指令会被放在master的复制缓冲区中，该缓冲区在第一个slave连接时被创建，用于接受数据同步后的master的写指令</li>
+<li>slave节点接受rdb文件后会清空自身原有的数据 执行rdb文件恢复过程（至此为全量复制），操作完成后向master发送同步成功消息</li>
+<li>随后master会将复制缓冲区中的指令数据发送给slave节点 slave收到数据后执行bgrewriteaof操作对数据进行重写（部分复制）</li>
+</ul>
+<p>注意：</p>
+<pre><code>master节点：
 
-容量瓶颈
+    数据同步阶段应该避免高峰期，防止由执行bgsave带来过长的阻塞时间
 
-单机redis内存不够用，只能升级内存
+    复制缓冲区不宜设置的太小 缓冲区溢出会引起循环的全量复制操作
 
+    配置参数：repl-backlog-size 1mb  默认大小为1mb
 
-成本太高
+slave节点：
 
+    关闭该节点对外服务：slave-serve-stale-data no|yes
 
-结论：  考虑使用多台服务器，多台服务器连接在一起并将数据同
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    多个slave节点请求master数据时 master传输的数据量很大 会降低网络中的可用带宽 需错峰
+
+    slave过多时，建议调整拓扑结构（将某些slave提升为某些节点的master，通过这些master来进行数据同步，但会产生一定的延时）以此分担master同步数据的压力</code></pre><h4 id="命令传播阶段"><a href="#命令传播阶段" class="headerlink" title="命令传播阶段"></a>命令传播阶段</h4><p>在进行数据同步后（全量复制与部分复制），master节点数据仍然会发生变化，所以在此期间要不断的进行数据同步，这个时候的同步采用的是命令传播的方式，在master上会维护一个复制积压缓冲区（即前面说的复制缓冲区），复制缓冲区可以把其作为一个FIFO的队列，队列中以AOF文件的格式记录后续的写命令，如下图：</p>
+<table>
+<thead>
+<tr>
+<th>0x11</th>
+<th>0x12</th>
+<th>0x13</th>
+<th>0x14</th>
+<th>0x15</th>
+<th>0x16</th>
+<th>0x17</th>
+<th>0x18</th>
+<th>offset</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$</td>
+<td>3</td>
+<td>\n</td>
+<td>\r</td>
+<td>s</td>
+<td>e</td>
+<td>t</td>
+<td>…</td>
+<td>data</td>
+</tr>
+</tbody></table>
+<p>每一个数据都是一个字节，并且以offset来定位数据。master将复制积压缓冲区的内容传输给slave节点后，slave便执行aof重写后将数据进行同步</p>
+<p><img src="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%91%BD%E4%BB%A4%E4%BC%A0%E6%92%AD%E8%BF%87%E7%A8%8B.PNG" alt></p>
+<p>psync2 同数据同步阶段，在slave第一次请求同步时，slave中没有存储offset，所以发送一条psync2 ？ -1的指令来请求同步，后续同步时带上自己的runid和保存的offset</p>
+<p>在命令传播阶段时，slave定期的发送replconf ack offset来检测数据是否发生变化，定期发送由心跳机制维护</p>
+<p><img src="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E5%BF%83%E8%B7%B3.PNG" alt></p>
+<h4 id="如何避免全量复制"><a href="#如何避免全量复制" class="headerlink" title="如何避免全量复制"></a>如何避免全量复制</h4><p>内部策略：为了保证master的runid与offset在重启前后一致，master在关闭时执行shutdown save的指令。将offset和runid持久化到rdb文件中，在下次启动时将runid和offset重新复制给当前的runid和offset，所有的slave都会认为master没有发生变化</p>
+<p>确定合适的缓冲区：repl-backlog-size 1mb 复制缓冲区的大小定制的过小也会造成频繁的全量复制</p>
+<p>缓冲区设置如下：估算slave与master重连的平均时长；估算master每秒写命令的数量；缓冲区大小：2*sencond*count</p>
+<h4 id="发生频繁的网络中断如何处理"><a href="#发生频繁的网络中断如何处理" class="headerlink" title="发生频繁的网络中断如何处理"></a>发生频繁的网络中断如何处理</h4><p><img src="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E7%BD%91%E7%BB%9C%E4%B8%AD%E6%96%AD1.PNG" alt></p>
+<p>设置参数repl-timeout 默认时长时60s 超过60s则将slave释放掉</p>
+<p><img src="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E7%BD%91%E7%BB%9C%E4%B8%AD%E6%96%AD2.PNG" alt="网络中断2"></p>
+<h3 id="2-哨兵"><a href="#2-哨兵" class="headerlink" title="2 哨兵"></a>2 哨兵</h3><p>哨兵是一个分布式系统，用于对主从结构中的redis服务器进行监控，当出现故障时使用投票机制选出新的master并且将slave节点连接到新的master上。</p>
+<p>作用：</p>
+<pre><code>监控</code></pre><ul>
+<li><p>不断检测master和slave是否正常运行</p>
+<p>  通知</p>
+</li>
+<li><p>当监控的服务器出现问题时，向其他（哨兵，服务器）发送通知，master上线后也需要发送通知</p>
+<p>  故障转移</p>
+</li>
+<li><p>当master出现故障后，slave断开与master的连接，并且挑选出一个slave作为master，并将slave连接到该master上</p>
+</li>
+</ul>
+<h4 id="哨兵配置"><a href="#哨兵配置" class="headerlink" title="哨兵配置"></a>哨兵配置</h4><p><img src="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E5%93%A8%E5%85%B51.PNG" alt="哨兵1"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 默认监控 127.0.0.1:6379 当有2个哨兵意见一致时哨兵生效</span></span><br><span class="line">sentinel monitor mymaster 127.0.0.1 6379 2</span><br><span class="line"><span class="comment"># 经过多少秒才判定服务器下线 默认30s</span></span><br><span class="line">sentinel down-after-miliseconds mymaster 30000</span><br><span class="line"><span class="comment"># 执行并行同步的线程数量</span></span><br><span class="line">sentinel parallel-sycns mymaster 1</span><br><span class="line"><span class="comment"># 经过多少秒才判定同步失败 默认3分钟</span></span><br><span class="line">sentinel failover-timeout mymaster 180000</span><br></pre></td></tr></table></figure>
+
+<h4 id="哨兵监控过程"><a href="#哨兵监控过程" class="headerlink" title="哨兵监控过程"></a>哨兵监控过程</h4><p><img src="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E5%93%A8%E5%85%B52.PNG" alt="哨兵2"></p>
+<ol>
+<li>哨兵向配置文件中监控的主机发起info命令 获取master和slave以及sentinel等一系列信息</li>
+<li>为了方便后续的命令交互，哨兵与所有服务器建立一个cmd连接</li>
+<li>哨兵继续向slave发送info命令  获取slave的详细信息</li>
+<li>后续的哨兵向master发送info命令时 会感知到有其他哨兵在监控 该哨兵会与之前监控的哨兵建立发布/订阅的信息通道用来进行各个哨兵之间的同步，来保证数据的一致性</li>
+</ol>
+<p>哨兵通知过程</p>
+<p><img src="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E5%93%A8%E5%85%B53.PNG" alt="哨兵3"></p>
+<p>sentinel不断地向服务器发送hello命令 以此来确定服务器的存活状态，一个哨兵hello执行后获取返回的信息通过过publish|subscribe机制在哨兵之间传递 之后所有哨兵可获取服务器的状态</p>
+<h4 id="故障转移过程"><a href="#故障转移过程" class="headerlink" title="故障转移过程"></a>故障转移过程</h4><ul>
+<li>当一个哨兵发出hello命令后得不到返回并且一直持续了down-aftermilisecond 秒后 该哨兵将该台服务器置为主观下线状态。</li>
+</ul>
+<p><img src="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E5%93%A8%E5%85%B55.PNG" alt></p>
+<ul>
+<li>该哨兵将服务器下线的通知在哨兵集群内进行传递，其余哨兵也执行对该台服务器的状态确认（发送hello命令），当有超过半数（通过配置亦可指定）的哨兵确认主观下线后，该服务器状态转为客观下线。</li>
+<li>为了避免繁琐和复杂的操作，哨兵之间需通过投票机制选举出“一位代表”来确定新的master。具体操作为： 每台哨兵在哨兵内网中发送自己的投票信息，哨兵既作为投票者也作为参选者，投票信息包括要出故障的服务器信息，自身的runid以及参与竞选的次数（如果一轮未决出，则继续下一轮投票）</li>
+<li>master的选择条件：<ul>
+<li>在线的</li>
+<li>响应快的</li>
+<li>与原master连接时间最近的</li>
+<li>优先原则<ul>
+<li>offset（偏移量较小的）</li>
+<li>runid较小的</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>新的master选举出来后，哨兵代表向新的master发送一条指令（slaveof no one）断开所有连接</li>
+<li>向其他的服务器发送一条（slaveof ip port）新master的ip和端口</li>
+</ul>
+<h3 id="3-集群"><a href="#3-集群" class="headerlink" title="3 集群"></a>3 集群</h3><p>定义：使用网络将多台计算机连接起来提供统一的服务并提供统一的管理方式，对外仍然表现为单机的形式</p>
+<p><strong>redis集群机构设计</strong></p>
+<ul>
+<li>redis集群存储结构设计</li>
+</ul>
+<p>redis将每个redis16384个的数据槽，每个槽位可以存放多个数据，即将多个redis进行分区，当外部请求存放数据时，首先通过CRC16算法计算出一个校验和，再对16384进行取模操作得到该数据应存放的槽位，整个过程是对键值到槽位的一个映射过程。</p>
+<p><img src="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E9%9B%86%E7%BE%A4%E6%95%B0%E6%8D%AE%E8%AE%BE%E8%AE%A11.PNG" alt></p>
+<ul>
+<li>redis集群通讯设计</li>
+</ul>
+<p>为了加快定位数据的速度，redis服务器之间相互通讯，每个服务器中都有着一张记录所有服务器拥有槽位情况的表，在取模操作完成后首先去查接受到该请求的redis服务器中有没有该槽位，如果没有，则给出拥有该槽位的redis服务器地址，进而重新发起请求</p>
+<p><img src="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E9%9B%86%E7%BE%A4%E9%80%9A%E8%AE%AF%E8%AE%BE%E8%AE%A1.PNG" alt="redis集群通讯设计"></p>
+<p>redis集群搭建</p>
+<ul>
+<li>首先启动六个redis服务，每个redis监听不同的端口，在此之前需修改其配置文件，让每个redis-server进程都开启支持集群的配置</li>
+</ul>
+<p><img src="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E9%9B%86%E7%BE%A4%E5%AE%9E%E7%8E%B02.PNG" alt></p>
+<p>添加如上配置内容后开启服务节点 在开启所有节点后 开始创建集群</p>
+<ul>
+<li><p>创建命令为 redis-cli –cluster create ip:port … –cluster-replicas num(num为每个master的slave节点的数量)</p>
+</li>
+<li><p>创建完成后会显示出每个master节点分配的槽位数量以及范围（注意：slave节点并不占有槽位，它只与master节点进行数据同步操作来保持数据一致性）</p>
+</li>
+</ul>
+<p>对集群进行测试</p>
+<p><img src="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%9B%86%E7%BE%A4/%E9%9B%86%E7%BE%A4%E5%AE%9E%E7%8E%B01.PNG" alt></p>
+<p><strong>redis的集群分区</strong>:</p>
+<p>最主要的目的都是在移除、添加一个节点时对已经存在的缓存数据的定位影响尽可能的降到最小。redis将哈希槽分布到不同节点的做法使得用户可以很容易地向集群中添加或者删除节点， 比如说：</p>
+<ul>
+<li><p>如果用户将新节点 D 添加到集群中， 那么集群只需要将节点 A 、B 、 C 中的某些槽移动到节点 D 就可以了。</p>
+</li>
+<li><p>与此类似， 如果用户要从集群中移除节点 A ， 那么集群只需要将节点 A 中的所有哈希槽移动到节点 B 和节点 C ， 然后再移除空白（不包含任何哈希槽）的节点 A 就可以了。</p>
+</li>
+</ul>
+<p>因为将一个哈希槽从一个节点移动到另一个节点不会造成节点阻塞， 所以无论是添加新节点还是移除已存在 节点， 又或者改变某个节点包含的哈希槽数量， 都不会造成集群下线，从而保证集群的可用性。下面我们就来学习下集群中节点的增加和删除。</p>
+<p>redis集群的节点添加和移除操作</p>
+
       
     </div>
     
@@ -866,212 +650,55 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%AB%98%E7%BA%A7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wanyw">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wanyw-Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%AB%98%E7%BA%A7/" itemprop="url">redis学习笔记——redis高级</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-30T16:50:46+08:00">
-                2020-07-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index">
-                    <span itemprop="name">中间件</span>
-                  </a>
-                </span>
+            <a href="/tags/redis/" rel="tag"># redis</a>
+          
+        </div>
+      
 
-                
-                
-              
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
             </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%AB%98%E7%BA%A7/" class="leancloud_visitors" data-flag-title="redis学习笔记——redis高级">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,462字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  9分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          1 redis的持久化
-什么是持久化
-利用永久性存储介质对数据进行保存，并且在特定的时间点对数据进行恢复的工作机制称为持久化
-
-为什么要持久化
-由于redis中的数据存储在内存中，一旦发生掉电故障，那么可能会发生数据丢失，所以为了保障数据的完整性，需要持久化机制支持数据的恢复
-
-
-1.1 持久化方法
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%AB%98%E7%BA%A7/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
           </div>
-          <!--/noindex-->
         
+        </div>
       
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
       
 
       
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E9%AB%98%E7%BA%A7/" rel="next" title="redis学习笔记——redis高级">
+                <i class="fa fa-chevron-left"></i> redis学习笔记——redis高级
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E4%BC%81%E4%B8%9A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="prev" title="redis学习笔记——redis企业解决方案">
+                redis学习笔记——redis企业解决方案 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
 
       
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -1081,568 +708,11 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E5%9F%BA%E7%A1%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wanyw">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wanyw-Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E5%9F%BA%E7%A1%80/" itemprop="url">redis基础</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-30T16:46:34+08:00">
-                2020-07-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index">
-                    <span itemprop="name">中间件</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E5%9F%BA%E7%A1%80/" class="leancloud_visitors" data-flag-title="redis基础">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  741字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          1 Redis是什么Redis： Remote Dictionary Server 远程字典服务
-Redis是一个基于ANSI C开发的一个基于键值对的高性能数据库
-特征：
-
-数据之间没有必然关系（存储的数据为键值对）
-使用单线程来执行所有命令
-高性能 读:11万次/s 写:8万次/s
-支持多种值类
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/07/30/redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94redis%E5%9F%BA%E7%A1%80/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/26/Do-you-know-JVM/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wanyw">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wanyw-Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/07/26/Do-you-know-JVM/" itemprop="url">Do you know JVM?</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-26T13:36:08+08:00">
-                2020-07-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2020/07/26/Do-you-know-JVM/" class="leancloud_visitors" data-flag-title="Do you know JVM?">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  8字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          JVM概述
-什么是JVM呢？ 
-
-
-          
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/07/26/Do-you-know-JVM/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/25/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wanyw">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Wanyw-Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/07/25/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-25T19:21:31+08:00">
-                2020-07-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2020/07/25/hello-world/" class="leancloud_visitors" data-flag-title="Hello World">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  78字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in 
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/07/25/hello-world/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -1650,6 +720,12 @@ Redis是一个基于ANSI C开发的一个基于键值对的高性能数据库
 
 
           
+
+  
+      <div id="gitalk-container"></div>
+  
+
+
 
         </div>
         
@@ -1670,8 +746,17 @@ Redis是一个基于ANSI C开发的一个基于键值对的高性能数据库
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -1738,6 +823,22 @@ Redis是一个基于ANSI C开发的一个基于键值对的高性能数据库
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-主从复制简介"><span class="nav-number">1.</span> <span class="nav-text">1 主从复制简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#引言-单机redis的风险与问题"><span class="nav-number">1.1.</span> <span class="nav-text">引言 单机redis的风险与问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主从复制"><span class="nav-number">1.2.</span> <span class="nav-text">主从复制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建立连接阶段"><span class="nav-number">1.3.</span> <span class="nav-text">建立连接阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据同步阶段"><span class="nav-number">1.4.</span> <span class="nav-text">数据同步阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令传播阶段"><span class="nav-number">1.5.</span> <span class="nav-text">命令传播阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何避免全量复制"><span class="nav-number">1.6.</span> <span class="nav-text">如何避免全量复制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#发生频繁的网络中断如何处理"><span class="nav-number">1.7.</span> <span class="nav-text">发生频繁的网络中断如何处理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-哨兵"><span class="nav-number">2.</span> <span class="nav-text">2 哨兵</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#哨兵配置"><span class="nav-number">2.1.</span> <span class="nav-text">哨兵配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#哨兵监控过程"><span class="nav-number">2.2.</span> <span class="nav-text">哨兵监控过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#故障转移过程"><span class="nav-number">2.3.</span> <span class="nav-text">故障转移过程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-集群"><span class="nav-number">3.</span> <span class="nav-text">3 集群</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1880,6 +981,10 @@ Redis是一个基于ANSI C开发的一个基于键值对的高性能数据库
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -1920,6 +1025,21 @@ Redis是一个基于ANSI C开发的一个基于键值对的高性能数据库
 
 
 
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '3197933a121d0d13d2d0',
+          clientSecret: 'e9e9ec52d4b8c5b0ea2aa54c13d48fdc04b88ace',
+          repo: 'wanyw-bot.github.io',
+          owner: 'wanyw-bot',
+          admin: ['wanyw-bot'],
+          id: location.pathname,
+          distractionFreeMode: 'false'
+        })
+        gitalk.render('gitalk-container')           
+       </script>
 
 
   
