@@ -576,4 +576,147 @@ Because TreeNodes are about twice the size of regular nodes, we
         <tag>数据结构</tag>
       </tags>
   </entry>
+  <entry>
+    <title>MySQL知识review</title>
+    <url>/2020/08/24/MySQL%D6%AA%CA%B6review/</url>
+    <content><![CDATA[<h3 id="MySQL知识review"><a href="#MySQL知识review" class="headerlink" title="MySQL知识review"></a>MySQL知识review</h3><h4 id="1-基表与视图"><a href="#1-基表与视图" class="headerlink" title="1 基表与视图"></a>1 基表与视图</h4><p>关系称为表，是关系数据库的基本组成单位。在SQL中，表分为两种：</p>
+<ul>
+<li><p>基表：数据<code>显式地存储</code>在数据库中</p>
+</li>
+<li><p>视图：视图是个<code>虚表</code>。<strong>仅有逻辑定义，可根据其定义由其它表（视图）导出，但不作为一个表显式地存储在数据库中。</strong>视图可像基表一样，参与各种数据库操作。</p>
+<ul>
+<li><p>临时视图</p>
+<p>  <strong>对于较复杂的查询，可将查询中相对独立部分作为查询的中间结果，定义为临时视图。</strong>临时视图在功能上与普通视图一样，但仅用于附在临时视图定义后的查询语句中。该查询语句结束后，临时视图随之自行消失</p>
+</li>
+<li><p>普通视图</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/SQL%E4%B8%80%E8%88%AC%E6%94%AF%E6%8C%81%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.png" alt="SQL支持的数据类型"></p>
+<h4 id="2-基表模式的修改"><a href="#2-基表模式的修改" class="headerlink" title="2 基表模式的修改"></a>2 基表模式的修改</h4><h5 id="2-1-增加列"><a href="#2-1-增加列" class="headerlink" title="2.1 增加列"></a>2.1 增加列</h5><blockquote>
+<p>ALTER TABLE [&lt;表的创建者名&gt;]&lt;表名&gt; ADD &lt;列名&gt; &lt;类型&gt;</p>
+</blockquote>
+<h5 id="2-2-删除基表"><a href="#2-2-删除基表" class="headerlink" title="2.2 删除基表"></a>2.2 删除基表</h5><blockquote>
+<p>DROP TABLE &lt;表名&gt;</p>
+</blockquote>
+<h5 id="2-3-补充定义主键"><a href="#2-3-补充定义主键" class="headerlink" title="2.3 补充定义主键"></a>2.3 补充定义主键</h5><blockquote>
+<p>ALTER TABLE &lt;表名&gt;  ADD PRIMARY KEY （&lt;列名表&gt;)</p>
+</blockquote>
+<h5 id="2-4-撤销主键定义"><a href="#2-4-撤销主键定义" class="headerlink" title="2.4  撤销主键定义"></a>2.4  撤销主键定义</h5><p>一般情况下，一个基表如果已定义了主键，则系统会在主键上自动建立索引。当插入新行时 ，系统会进行主键唯一性检查，这样，当进行大量的插入操作时，势必影响系统效率。</p>
+<blockquote>
+<p>ALTER TABLE &lt;表名&gt; DROP PRIMARY KEY ;</p>
+</blockquote>
+<h5 id="2-5-补充定义外键"><a href="#2-5-补充定义外键" class="headerlink" title="2.5 补充定义外键"></a>2.5 补充定义外键</h5><blockquote>
+<p>ALTER TABLE &lt;表名-1&gt; ADD FOREIGN KEY [&lt;外键名&gt;]（&lt;列名表&gt;）REFERENCES  &lt;表名-2&gt;<br>   [ON DELETE { RESTRICT | CASCADE |SET NULL}]; </p>
+</blockquote>
+<h5 id="2-6-撤销外键定义"><a href="#2-6-撤销外键定义" class="headerlink" title="2.6  撤销外键定义"></a>2.6  撤销外键定义</h5><blockquote>
+<p>ALTER TABLE &lt;表名&gt; DROP FOREIGN KEY &lt;外键名&gt; ;</p>
+</blockquote>
+<h4 id="3-索引建立与删除"><a href="#3-索引建立与删除" class="headerlink" title="3 索引建立与删除"></a>3 索引建立与删除</h4><p><img src="/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E7%B4%A2%E5%BC%95%E5%BB%BA%E7%AB%8B.png" alt="数据库索引建立"> </p>
+<p>索引的建立有多种途径，既可以在创建表时指定索引，也可以在创建表后修改表结构添加索引，还可以直接使用CREATE INDEX的命令来创建索引。</p>
+<ul>
+<li><p>创建表时指定索引</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`table`</span> (</span><br><span class="line">	<span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT ,</span><br><span class="line">	<span class="string">`title`</span> <span class="built_in">char</span>(<span class="number">255</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">COLLATE</span> utf8_general_ci <span class="keyword">NOT</span> <span class="literal">NULL</span> ,</span><br><span class="line">	<span class="string">`content`</span> <span class="built_in">text</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">COLLATE</span> utf8_general_ci <span class="literal">NULL</span> ,</span><br><span class="line">	<span class="string">`time`</span> <span class="built_in">int</span>(<span class="number">10</span>) <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> ,</span><br><span class="line">	PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">	<span class="keyword">INDEX</span> tindex(title[<span class="keyword">ASC</span>],<span class="keyword">column</span>[<span class="keyword">DESC</span>]...)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改表结构添加索引</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="keyword">table</span> <span class="keyword">ADD</span> <span class="keyword">INDEX</span> tindex(title[<span class="keyword">ASC</span>],<span class="keyword">column</span>[<span class="keyword">DESC</span>]...)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>直接使用CREATE INDEX的命令来创建索引</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">INDEX</span> tindex <span class="keyword">ON</span> <span class="keyword">table</span>(title[<span class="keyword">ASC</span>],<span class="keyword">column</span>[<span class="keyword">DESC</span>]...)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除索引</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">DROP INDEX index_name ON &lt;table_name&gt;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="4-基本SQL查询语言"><a href="#4-基本SQL查询语言" class="headerlink" title="4 基本SQL查询语言"></a>4 基本SQL查询语言</h4><p><img src="/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E5%9F%BA%E6%9C%ACSQL%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5.png" alt="基本SQL查询语句"></p>
+<ul>
+<li>SELECT——指出要查询的项目，通常指列名或表达式，是必需的。</li>
+<li>FROM——指明被查询的表或视图名，是必需的。 </li>
+<li>WHERE ——说明查询条件，是任选的。 </li>
+<li>GROUP BY——将表按列的值分组，是任选的。 </li>
+<li>ORDER BY——将查询结果排序，是任选的。</li>
+</ul>
+<p><img src="/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E6%9F%A5%E8%AF%A2%E6%9D%A1%E4%BB%B6.png" alt="查询条件"></p>
+<h4 id="5-数据操纵语言"><a href="#5-数据操纵语言" class="headerlink" title="5 数据操纵语言"></a>5 数据操纵语言</h4><p>SQL提供了增、删、改数据库中数据的语句，分别介绍如下。</p>
+<h5 id="5-1-Insert-语句"><a href="#5-1-Insert-语句" class="headerlink" title="5.1 Insert 语句"></a>5.1 Insert 语句</h5><p><img src="/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E6%8F%92%E5%85%A5%E8%AF%AD%E5%8F%A5.png" alt="Insert语句"></p>
+<h5 id="5-2-Delete语句"><a href="#5-2-Delete语句" class="headerlink" title="5.2 Delete语句"></a>5.2 Delete语句</h5><p><img src="/2020/08/24/MySQL%D6%AA%CA%B6review/E:%5Cwanyw-blog%5Csource_posts%5C2020%5C08%5C24%5CMySQL%E7%9F%A5%E8%AF%86review%5C%E5%88%A0%E9%99%A4%E8%AF%AD%E5%8F%A5.png" alt="Delete语句"></p>
+<h5 id="5-3-Update语句"><a href="#5-3-Update语句" class="headerlink" title="5.3 Update语句"></a>5.3 Update语句</h5><p><img src="/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5.png" alt="Update语句"></p>
+<h4 id="6-视图"><a href="#6-视图" class="headerlink" title="6 视图"></a>6 视图</h4><h5 id="6-1-普通视图"><a href="#6-1-普通视图" class="headerlink" title="6.1 普通视图"></a>6.1 普通视图</h5><p>   视图：是由其它视图或基表导出的虚表。它不是一个存在数据库中的表，而是在数据目录中保留其逻辑定义。</p>
+<p>当视图参与数据库操作时，可通过修改查询条件，把对视图的查询转换为对基表的查询。</p>
+<h5 id="6-2-视图的定义"><a href="#6-2-视图的定义" class="headerlink" title="6.2 视图的定义"></a>6.2 视图的定义</h5><p>视图可用于一些经常要查询的数据，<strong>视图对应的内容总是实时、最新的内容，并不是视图定义时对应内容。这是由于基表随着更新操作其内容在不断变化，所以视图对应的内容也在不断变化</strong></p>
+<h5 id="6-3-视图的撤销"><a href="#6-3-视图的撤销" class="headerlink" title="6.3 视图的撤销"></a>6.3 视图的撤销</h5><p>视图不再需要时，可以从系统中撤消</p>
+<h5 id="6-4-视图创建与撤销"><a href="#6-4-视图创建与撤销" class="headerlink" title="6.4 视图创建与撤销"></a>6.4 视图创建与撤销</h5><p><img src="/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E8%A7%86%E5%9B%BE%E5%88%9B%E5%BB%BA.png" alt="视图创建"> </p>
+<h5 id="6-5-视图更新"><a href="#6-5-视图更新" class="headerlink" title="6.5 视图更新"></a>6.5 视图更新</h5><p>视图更新是一个较复杂的问题。通常都加以限制： </p>
+<ul>
+<li>由一个基表定义的视图，只有含有基表的主键或候补键，并且视图中没有用表达式或函数定义的属性，才允许更新。</li>
+<li>由多表连接所定义的视图不允许更新。</li>
+<li>定义中用到GROUP BY子句或聚集函数的视图不允许更新。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算机网络复习</title>
+    <url>/2020/08/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%A4%8D%E4%B9%A0/</url>
+    <content><![CDATA[<h4 id="1-物理层"><a href="#1-物理层" class="headerlink" title="1 物理层"></a>1 物理层</h4><h5 id="1-1-物理层的任务及定义"><a href="#1-1-物理层的任务及定义" class="headerlink" title="1.1 物理层的任务及定义"></a>1.1 物理层的任务及定义</h5><p>物理层的主要任务<strong>以在两个网络设备之间提供透明的比特流传输</strong></p>
+<p>OSI的物理层定义：物理层提供<strong>机械的、电气的、功能的和规程的特性</strong>，目的是启动、维护和关闭数据链路实体之间进行比特传输的物理连接。</p>
+<ul>
+<li>机械特性：指明接口所用接线器的形状和尺寸、引线数目和排列、固定和锁定装置等等</li>
+<li>电气特性：指明在接口电缆的各条线上出现的电压的范围。即什么样的电压表示l或0。传输速度、最大传输距离</li>
+<li>功能特性：指明某条线上出现的某一电平的电压表示何种意义，  定义各条物理线路的功能。（数据，控制，接地，定时）</li>
+<li>规程特性：指明对于不同功能的各种可能事件的出现顺序。主要定义各条物理线路的工作规程和时序关系。 </li>
+</ul>
+<h4 id="2-数据链路层"><a href="#2-数据链路层" class="headerlink" title="2 数据链路层"></a>2 数据链路层</h4><p>信道：向某个方向传输信息的媒体</p>
+<p>数据链路层使用的信道类型：</p>
+<ul>
+<li>点对点信道 这种信道使用一对一的点到点的通信方式 常用协议：PPP(Point To Point)</li>
+<li>广播信道 使用一对多的广播通信方式</li>
+</ul>
+<p><strong>数据链路层的三个基本问题</strong></p>
+<blockquote>
+<p>封装成帧、透明传输、差错检测</p>
+</blockquote>
+<h5 id="2-1-PPP协议-点对点协议-通常用于用户接入因特网"><a href="#2-1-PPP协议-点对点协议-通常用于用户接入因特网" class="headerlink" title="2.1 PPP协议(点对点协议) 通常用于用户接入因特网"></a>2.1 PPP协议(点对点协议) 通常用于用户接入因特网</h5><p><strong>ppp协议的组成</strong></p>
+<ul>
+<li>将IP数据包封装到链路层的方法，PPP协议既支持异步也支持同步链路</li>
+<li>一个用来建立、配置和测试数据链路连接的链路控制协议（LCP-Link Control Protocol）</li>
+<li>一套网络控制协议(NCP)</li>
+</ul>
+<p>PPP帧格式如下：</p>
+<p><img src="/2020/08/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%A4%8D%E4%B9%A0/PPP%E5%B8%A7%E6%A0%BC%E5%BC%8F.png" alt></p>
+<h4 id="3-使用广播信道的数据链路层"><a href="#3-使用广播信道的数据链路层" class="headerlink" title="3 使用广播信道的数据链路层"></a>3 使用广播信道的数据链路层</h4><p>局域网最主要的特点：网络为一个单位所拥有，且地理范围和站点数目均有限。</p>
+<p>主要优点：</p>
+<ul>
+<li>具有广播功能，处于局域网上的计算机可以共享连接在局域网上的各种硬件和软件资源</li>
+<li>便于系统的拓展和演变，各设备的位置可灵活调整</li>
+<li>提高了系统的可靠性和可用性</li>
+</ul>
+<h5 id="3-1-共享信道技术"><a href="#3-1-共享信道技术" class="headerlink" title="3.1 共享信道技术"></a>3.1 共享信道技术</h5><ul>
+<li>静态划分信道，如频分复用、波分复用和码分复用等，当一个用户分配到了一条信道之后，就不会产生冲突，但这种静态划分信道的方式代价太大。</li>
+<li>动态媒体随机接入，信道并非固定分配给某个用户<ul>
+<li>随机接入 需要解决多个用户发送信息时产生信息碰撞的问题 如传统的以太网技术</li>
+<li>受控接入 用户发送信息必须遵循一定的控制 如令牌环局域网：只有当用户获取了令牌帧之后才能够发送信息，这种技术使用的较少</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>计算机网络</category>
+      </categories>
+      <tags>
+        <tag>TCP/IP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>draft</title>
+    <url>/2023/10/03/draft/</url>
+    <content><![CDATA[]]></content>
+  </entry>
 </search>

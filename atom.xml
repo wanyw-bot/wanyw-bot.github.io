@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-08-09T02:39:25.502Z</updated>
+  <updated>2023-10-03T01:45:44.446Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,75 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>draft</title>
+    <link href="http://yoursite.com/2023/10/03/draft/"/>
+    <id>http://yoursite.com/2023/10/03/draft/</id>
+    <published>2023-10-03T01:45:44.000Z</published>
+    <updated>2023-10-03T01:45:44.446Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>计算机网络复习</title>
+    <link href="http://yoursite.com/2020/08/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%A4%8D%E4%B9%A0/"/>
+    <id>http://yoursite.com/2020/08/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%A4%8D%E4%B9%A0/</id>
+    <published>2020-08-29T08:10:17.000Z</published>
+    <updated>2023-10-03T01:26:46.579Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h4 id=&quot;1-物理层&quot;&gt;&lt;a href=&quot;#1-物理层&quot; class=&quot;headerlink&quot; title=&quot;1 物理层&quot;&gt;&lt;/a&gt;1 物理层&lt;/h4&gt;&lt;h5 id=&quot;1-1-物理层的任务及定义&quot;&gt;&lt;a href=&quot;#1-1-物理层的任务及定义&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="计算机网络" scheme="http://yoursite.com/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
+    
+    
+      <category term="TCP/IP" scheme="http://yoursite.com/tags/TCP-IP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MySQL知识review</title>
+    <link href="http://yoursite.com/2020/08/24/MySQL%D6%AA%CA%B6review/"/>
+    <id>http://yoursite.com/2020/08/24/MySQL%D6%AA%CA%B6review/</id>
+    <published>2020-08-24T02:51:28.000Z</published>
+    <updated>2023-10-03T01:26:46.575Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;MySQL知识review&quot;&gt;&lt;a href=&quot;#MySQL知识review&quot; class=&quot;headerlink&quot; title=&quot;MySQL知识review&quot;&gt;&lt;/a&gt;MySQL知识review&lt;/h3&gt;&lt;h4 id=&quot;1-基表与视图&quot;&gt;&lt;a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="数据库" scheme="http://yoursite.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    
+      <category term="MySQL" scheme="http://yoursite.com/tags/MySQL/"/>
+    
+  </entry>
   
   <entry>
     <title>Java8源码解读系列——HashMap</title>

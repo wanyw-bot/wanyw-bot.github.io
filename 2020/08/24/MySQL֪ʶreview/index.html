@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="MySQL," />
 
 
 
@@ -83,16 +83,26 @@
 
 
 
-<meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="description" content="MySQL知识review1 基表与视图关系称为表，是关系数据库的基本组成单位。在SQL中，表分为两种：  基表：数据显式地存储在数据库中  视图：视图是个虚表。仅有逻辑定义，可根据其定义由其它表（视图）导出，但不作为一个表显式地存储在数据库中。视图可像基表一样，参与各种数据库操作。  临时视图   对于较复杂的查询，可将查询中相对独立部分作为查询的中间结果，定义为临时视图。临时视图在功能上与普通">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://yoursite.com/2020/07/25/hello-world/index.html">
+<meta property="og:title" content="MySQL知识review">
+<meta property="og:url" content="http://yoursite.com/2020/08/24/MySQL%D6%AA%CA%B6review/index.html">
 <meta property="og:site_name" content="Wanyw-Blog">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
-<meta property="article:published_time" content="2020-07-25T11:21:31.886Z">
-<meta property="article:modified_time" content="2020-07-25T11:21:31.886Z">
+<meta property="og:description" content="MySQL知识review1 基表与视图关系称为表，是关系数据库的基本组成单位。在SQL中，表分为两种：  基表：数据显式地存储在数据库中  视图：视图是个虚表。仅有逻辑定义，可根据其定义由其它表（视图）导出，但不作为一个表显式地存储在数据库中。视图可像基表一样，参与各种数据库操作。  临时视图   对于较复杂的查询，可将查询中相对独立部分作为查询的中间结果，定义为临时视图。临时视图在功能上与普通">
+<meta property="og:image" content="http://yoursite.com/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/SQL%E4%B8%80%E8%88%AC%E6%94%AF%E6%8C%81%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.png">
+<meta property="og:image" content="http://yoursite.com/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E7%B4%A2%E5%BC%95%E5%BB%BA%E7%AB%8B.png">
+<meta property="og:image" content="http://yoursite.com/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E5%9F%BA%E6%9C%ACSQL%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5.png">
+<meta property="og:image" content="http://yoursite.com/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E6%9F%A5%E8%AF%A2%E6%9D%A1%E4%BB%B6.png">
+<meta property="og:image" content="http://yoursite.com/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E6%8F%92%E5%85%A5%E8%AF%AD%E5%8F%A5.png">
+<meta property="og:image" content="http://yoursite.com/2020/08/24/MySQL%D6%AA%CA%B6review/E:%5Cwanyw-blog%5Csource_posts%5C2020%5C08%5C24%5CMySQL%E7%9F%A5%E8%AF%86review%5C%E5%88%A0%E9%99%A4%E8%AF%AD%E5%8F%A5.png">
+<meta property="og:image" content="http://yoursite.com/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5.png">
+<meta property="og:image" content="http://yoursite.com/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E8%A7%86%E5%9B%BE%E5%88%9B%E5%BB%BA.png">
+<meta property="article:published_time" content="2020-08-24T02:51:28.000Z">
+<meta property="article:modified_time" content="2023-10-03T01:26:46.575Z">
 <meta property="article:author" content="wanyw">
+<meta property="article:tag" content="MySQL">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/SQL%E4%B8%80%E8%88%AC%E6%94%AF%E6%8C%81%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.png">
 
 
 
@@ -122,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/07/25/hello-world/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/08/24/MySQL֪ʶreview/"/>
 
 
 
 
 
-  <title>Hello World | Wanyw-Blog</title>
+  <title>MySQL知识review | Wanyw-Blog</title>
   
 
 
@@ -299,7 +309,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/25/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/24/MySQL%D6%AA%CA%B6review/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wanyw">
@@ -316,7 +326,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Hello World</h1>
+          <h1 class="post-title" itemprop="name headline">MySQL知识review</h1>
         
 
         <div class="post-meta">
@@ -328,8 +338,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-25T19:21:31+08:00">
-                2020-07-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-24T10:51:28+08:00">
+                2020-08-24
               </time>
             
 
@@ -339,6 +349,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -346,7 +378,7 @@
 
           
           
-             <span id="/2020/07/25/hello-world/" class="leancloud_visitors" data-flag-title="Hello World">
+             <span id="/2020/08/24/MySQL%D6%AA%CA%B6review/" class="leancloud_visitors" data-flag-title="MySQL知识review">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -371,7 +403,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  78字
+                  1,017字
                 </span>
               
 
@@ -387,7 +419,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1分钟
+                  4分钟
                 </span>
               
             </div>
@@ -408,19 +440,81 @@
       
 
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+        <h3 id="MySQL知识review"><a href="#MySQL知识review" class="headerlink" title="MySQL知识review"></a>MySQL知识review</h3><h4 id="1-基表与视图"><a href="#1-基表与视图" class="headerlink" title="1 基表与视图"></a>1 基表与视图</h4><p>关系称为表，是关系数据库的基本组成单位。在SQL中，表分为两种：</p>
+<ul>
+<li><p>基表：数据<code>显式地存储</code>在数据库中</p>
+</li>
+<li><p>视图：视图是个<code>虚表</code>。<strong>仅有逻辑定义，可根据其定义由其它表（视图）导出，但不作为一个表显式地存储在数据库中。</strong>视图可像基表一样，参与各种数据库操作。</p>
+<ul>
+<li><p>临时视图</p>
+<p>  <strong>对于较复杂的查询，可将查询中相对独立部分作为查询的中间结果，定义为临时视图。</strong>临时视图在功能上与普通视图一样，但仅用于附在临时视图定义后的查询语句中。该查询语句结束后，临时视图随之自行消失</p>
+</li>
+<li><p>普通视图</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/SQL%E4%B8%80%E8%88%AC%E6%94%AF%E6%8C%81%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.png" alt="SQL支持的数据类型"></p>
+<h4 id="2-基表模式的修改"><a href="#2-基表模式的修改" class="headerlink" title="2 基表模式的修改"></a>2 基表模式的修改</h4><h5 id="2-1-增加列"><a href="#2-1-增加列" class="headerlink" title="2.1 增加列"></a>2.1 增加列</h5><blockquote>
+<p>ALTER TABLE [&lt;表的创建者名&gt;]&lt;表名&gt; ADD &lt;列名&gt; &lt;类型&gt;</p>
+</blockquote>
+<h5 id="2-2-删除基表"><a href="#2-2-删除基表" class="headerlink" title="2.2 删除基表"></a>2.2 删除基表</h5><blockquote>
+<p>DROP TABLE &lt;表名&gt;</p>
+</blockquote>
+<h5 id="2-3-补充定义主键"><a href="#2-3-补充定义主键" class="headerlink" title="2.3 补充定义主键"></a>2.3 补充定义主键</h5><blockquote>
+<p>ALTER TABLE &lt;表名&gt;  ADD PRIMARY KEY （&lt;列名表&gt;)</p>
+</blockquote>
+<h5 id="2-4-撤销主键定义"><a href="#2-4-撤销主键定义" class="headerlink" title="2.4  撤销主键定义"></a>2.4  撤销主键定义</h5><p>一般情况下，一个基表如果已定义了主键，则系统会在主键上自动建立索引。当插入新行时 ，系统会进行主键唯一性检查，这样，当进行大量的插入操作时，势必影响系统效率。</p>
+<blockquote>
+<p>ALTER TABLE &lt;表名&gt; DROP PRIMARY KEY ;</p>
+</blockquote>
+<h5 id="2-5-补充定义外键"><a href="#2-5-补充定义外键" class="headerlink" title="2.5 补充定义外键"></a>2.5 补充定义外键</h5><blockquote>
+<p>ALTER TABLE &lt;表名-1&gt; ADD FOREIGN KEY [&lt;外键名&gt;]（&lt;列名表&gt;）REFERENCES  &lt;表名-2&gt;<br>   [ON DELETE { RESTRICT | CASCADE |SET NULL}]; </p>
+</blockquote>
+<h5 id="2-6-撤销外键定义"><a href="#2-6-撤销外键定义" class="headerlink" title="2.6  撤销外键定义"></a>2.6  撤销外键定义</h5><blockquote>
+<p>ALTER TABLE &lt;表名&gt; DROP FOREIGN KEY &lt;外键名&gt; ;</p>
+</blockquote>
+<h4 id="3-索引建立与删除"><a href="#3-索引建立与删除" class="headerlink" title="3 索引建立与删除"></a>3 索引建立与删除</h4><p><img src="/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E7%B4%A2%E5%BC%95%E5%BB%BA%E7%AB%8B.png" alt="数据库索引建立"> </p>
+<p>索引的建立有多种途径，既可以在创建表时指定索引，也可以在创建表后修改表结构添加索引，还可以直接使用CREATE INDEX的命令来创建索引。</p>
+<ul>
+<li><p>创建表时指定索引</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`table`</span> (</span><br><span class="line">	<span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT ,</span><br><span class="line">	<span class="string">`title`</span> <span class="built_in">char</span>(<span class="number">255</span>) <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">COLLATE</span> utf8_general_ci <span class="keyword">NOT</span> <span class="literal">NULL</span> ,</span><br><span class="line">	<span class="string">`content`</span> <span class="built_in">text</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">COLLATE</span> utf8_general_ci <span class="literal">NULL</span> ,</span><br><span class="line">	<span class="string">`time`</span> <span class="built_in">int</span>(<span class="number">10</span>) <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="literal">NULL</span> ,</span><br><span class="line">	PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">	<span class="keyword">INDEX</span> tindex(title[<span class="keyword">ASC</span>],<span class="keyword">column</span>[<span class="keyword">DESC</span>]...)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改表结构添加索引</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> <span class="keyword">table</span> <span class="keyword">ADD</span> <span class="keyword">INDEX</span> tindex(title[<span class="keyword">ASC</span>],<span class="keyword">column</span>[<span class="keyword">DESC</span>]...)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>直接使用CREATE INDEX的命令来创建索引</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">INDEX</span> tindex <span class="keyword">ON</span> <span class="keyword">table</span>(title[<span class="keyword">ASC</span>],<span class="keyword">column</span>[<span class="keyword">DESC</span>]...)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除索引</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DROP INDEX index_name ON &lt;table_name&gt;</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+</li>
+</ul>
+<h4 id="4-基本SQL查询语言"><a href="#4-基本SQL查询语言" class="headerlink" title="4 基本SQL查询语言"></a>4 基本SQL查询语言</h4><p><img src="/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E5%9F%BA%E6%9C%ACSQL%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5.png" alt="基本SQL查询语句"></p>
+<ul>
+<li>SELECT——指出要查询的项目，通常指列名或表达式，是必需的。</li>
+<li>FROM——指明被查询的表或视图名，是必需的。 </li>
+<li>WHERE ——说明查询条件，是任选的。 </li>
+<li>GROUP BY——将表按列的值分组，是任选的。 </li>
+<li>ORDER BY——将查询结果排序，是任选的。</li>
+</ul>
+<p><img src="/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E6%9F%A5%E8%AF%A2%E6%9D%A1%E4%BB%B6.png" alt="查询条件"></p>
+<h4 id="5-数据操纵语言"><a href="#5-数据操纵语言" class="headerlink" title="5 数据操纵语言"></a>5 数据操纵语言</h4><p>SQL提供了增、删、改数据库中数据的语句，分别介绍如下。</p>
+<h5 id="5-1-Insert-语句"><a href="#5-1-Insert-语句" class="headerlink" title="5.1 Insert 语句"></a>5.1 Insert 语句</h5><p><img src="/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E6%8F%92%E5%85%A5%E8%AF%AD%E5%8F%A5.png" alt="Insert语句"></p>
+<h5 id="5-2-Delete语句"><a href="#5-2-Delete语句" class="headerlink" title="5.2 Delete语句"></a>5.2 Delete语句</h5><p><img src="/2020/08/24/MySQL%D6%AA%CA%B6review/E:%5Cwanyw-blog%5Csource_posts%5C2020%5C08%5C24%5CMySQL%E7%9F%A5%E8%AF%86review%5C%E5%88%A0%E9%99%A4%E8%AF%AD%E5%8F%A5.png" alt="Delete语句"></p>
+<h5 id="5-3-Update语句"><a href="#5-3-Update语句" class="headerlink" title="5.3 Update语句"></a>5.3 Update语句</h5><p><img src="/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5.png" alt="Update语句"></p>
+<h4 id="6-视图"><a href="#6-视图" class="headerlink" title="6 视图"></a>6 视图</h4><h5 id="6-1-普通视图"><a href="#6-1-普通视图" class="headerlink" title="6.1 普通视图"></a>6.1 普通视图</h5><p>   视图：是由其它视图或基表导出的虚表。它不是一个存在数据库中的表，而是在数据目录中保留其逻辑定义。</p>
+<p>当视图参与数据库操作时，可通过修改查询条件，把对视图的查询转换为对基表的查询。</p>
+<h5 id="6-2-视图的定义"><a href="#6-2-视图的定义" class="headerlink" title="6.2 视图的定义"></a>6.2 视图的定义</h5><p>视图可用于一些经常要查询的数据，<strong>视图对应的内容总是实时、最新的内容，并不是视图定义时对应内容。这是由于基表随着更新操作其内容在不断变化，所以视图对应的内容也在不断变化</strong></p>
+<h5 id="6-3-视图的撤销"><a href="#6-3-视图的撤销" class="headerlink" title="6.3 视图的撤销"></a>6.3 视图的撤销</h5><p>视图不再需要时，可以从系统中撤消</p>
+<h5 id="6-4-视图创建与撤销"><a href="#6-4-视图创建与撤销" class="headerlink" title="6.4 视图创建与撤销"></a>6.4 视图创建与撤销</h5><p><img src="/2020/08/24/MySQL%D6%AA%CA%B6review/MySQL%E7%9F%A5%E8%AF%86review/%E8%A7%86%E5%9B%BE%E5%88%9B%E5%BB%BA.png" alt="视图创建"> </p>
+<h5 id="6-5-视图更新"><a href="#6-5-视图更新" class="headerlink" title="6.5 视图更新"></a>6.5 视图更新</h5><p>视图更新是一个较复杂的问题。通常都加以限制： </p>
+<ul>
+<li>由一个基表定义的视图，只有含有基表的主键或候补键，并且视图中没有用表达式或函数定义的属性，才允许更新。</li>
+<li>由多表连接所定义的视图不允许更新。</li>
+<li>定义中用到GROUP BY子句或聚集函数的视图不允许更新。</li>
+</ul>
 
       
     </div>
@@ -435,6 +529,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+        </div>
       
 
       
@@ -460,14 +560,18 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2020/08/09/Java8%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94HashMap/" rel="next" title="Java8源码解读系列——HashMap">
+                <i class="fa fa-chevron-left"></i> Java8源码解读系列——HashMap
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2020/07/26/Do-you-know-JVM/" rel="prev" title="Do you know JVM?">
-                Do you know JVM? <i class="fa fa-chevron-right"></i>
+              <a href="/2020/08/29/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%A4%8D%E4%B9%A0/" rel="prev" title="计算机网络复习">
+                计算机网络复习 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -609,7 +713,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL知识review"><span class="nav-number">1.</span> <span class="nav-text">MySQL知识review</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-基表与视图"><span class="nav-number">1.1.</span> <span class="nav-text">1 基表与视图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-基表模式的修改"><span class="nav-number">1.2.</span> <span class="nav-text">2 基表模式的修改</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-增加列"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 增加列</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-删除基表"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 删除基表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-补充定义主键"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 补充定义主键</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-4-撤销主键定义"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4  撤销主键定义</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-5-补充定义外键"><span class="nav-number">1.2.5.</span> <span class="nav-text">2.5 补充定义外键</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-6-撤销外键定义"><span class="nav-number">1.2.6.</span> <span class="nav-text">2.6  撤销外键定义</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-索引建立与删除"><span class="nav-number">1.3.</span> <span class="nav-text">3 索引建立与删除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-基本SQL查询语言"><span class="nav-number">1.4.</span> <span class="nav-text">4 基本SQL查询语言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-数据操纵语言"><span class="nav-number">1.5.</span> <span class="nav-text">5 数据操纵语言</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#5-1-Insert-语句"><span class="nav-number">1.5.1.</span> <span class="nav-text">5.1 Insert 语句</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-2-Delete语句"><span class="nav-number">1.5.2.</span> <span class="nav-text">5.2 Delete语句</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-3-Update语句"><span class="nav-number">1.5.3.</span> <span class="nav-text">5.3 Update语句</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-视图"><span class="nav-number">1.6.</span> <span class="nav-text">6 视图</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#6-1-普通视图"><span class="nav-number">1.6.1.</span> <span class="nav-text">6.1 普通视图</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-2-视图的定义"><span class="nav-number">1.6.2.</span> <span class="nav-text">6.2 视图的定义</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-3-视图的撤销"><span class="nav-number">1.6.3.</span> <span class="nav-text">6.3 视图的撤销</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-4-视图创建与撤销"><span class="nav-number">1.6.4.</span> <span class="nav-text">6.4 视图创建与撤销</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-5-视图更新"><span class="nav-number">1.6.5.</span> <span class="nav-text">6.5 视图更新</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
